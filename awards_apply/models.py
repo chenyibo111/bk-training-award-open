@@ -20,10 +20,23 @@ class Awards(models.Model):
     ]
     approval_state = models.IntegerField(choices=APPROVAL_STATE, default=3, verbose_name="评审状态")
 
+    def to_json(self):
+        return {
+            "id": self.id,
+            "award_name": self.award_name,
+            "award_level": self.award_level,
+            "award_description": self.award_description,
+            "award_consultant": self.award_consultant,
+            "award_image": self.award_image.name,
+            "create_time": str(self.create_time).split('+')[0],
+            "start_time": str(self.start_time).split('+')[0],
+            "end_time": str(self.end_time).split('+')[0],
+            "approval_state": self.approval_state,
+        }
 
 class Secretary(models.Model):
-    user_id = models.CharField(max_length=128, verbose_name="用户id")
-    group_id = models.CharField(max_length=128, verbose_name="组id")
+    group_id = models.IntegerField(max_length=128, verbose_name="组id")
+    secretaries = json_models.JSONField(verbose_name="组内秘书", default=list)
 
 
 # 申请表
